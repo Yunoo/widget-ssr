@@ -1,9 +1,9 @@
 {
   "plugins": ["prettier"],
   "parser": "@typescript-eslint/parser",
-  "extends": ["next", "prettier", "plugin:prettier/recommended"],
+  "extends": ["next", "prettier"],
   "rules": {
-    "no-console": ["warn", { "allow": ["warn", "info"] }],
+    "no-console": ["warn", { "allow": ["warn", "error", "debug"] }],
     "prettier/prettier": "error",
     "newline-per-chained-call": 0,
     "semi": [0, "never"],

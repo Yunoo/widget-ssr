@@ -1,31 +1,30 @@
-import { SearchButton } from '@/components/search-button'
+import { SearchButton } from '@/app/components/search-button'
 import getWeather from '@/lib/openweather'
 import { getWindDirection } from '@/lib/wind'
+import { Props } from '@/types'
+import React from 'react'
 
 const DEFAULT_CITY = 'Copenhagen'
 
-type Props = {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
-
-export default async function App({ params, searchParams }: Props) {
+export default async function App(props: Props): Promise<JSX.Element> {
+  const { searchParams } = props || {}
   let weatherData
   try {
     const city = (Array.isArray(searchParams?.city) ? searchParams?.city?.shift() : searchParams?.city) || DEFAULT_CITY
     weatherData = await getWeather(city)
   } catch (e: any) {
     console.error(e.message)
-    // TODO: Proper error handing
+    weatherData = {}
+    // TODO: Proper error handling?
   }
 
   return (
-    <div className="widget">
+    <div data-testid="weather-widget" className="widget">
       <div className="panel panel-info">
         <div className="panel-heading">
           Weather in <b>{weatherData?.name || ''}</b>
         </div>
-        <ul className="list-group">
+        <ul aria-label="weather-data" className="list-group">
           <li className="list-group-item">
             Temperature: <b>{weatherData?.main?.temp}°C</b>
           </li>
@@ -39,7 +38,7 @@ export default async function App({ params, searchParams }: Props) {
             </b>
           </li>
           <li className="list-group-item">
-            <form id="search-form" className="form-inline">
+            <form aria-label="search-form" className="form-inline">
               <div className="form-group">
                 <input
                   type="text"
@@ -47,8 +46,8 @@ export default async function App({ params, searchParams }: Props) {
                   id="city"
                   name="city"
                   autoComplete="off"
-                  defaultValue={weatherData?.name}
                   placeholder="City"
+                  required
                 />
                 <SearchButton />
               </div>
