@@ -16,6 +16,7 @@ export default async function getWeather(city?: string): Promise<WeatherData> {
 
   if (!res.ok) {
     // Should trigger `error.js` Error Boundary
+
     throw new Error('Failed to fetch data')
   }
 
